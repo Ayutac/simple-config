@@ -5,8 +5,9 @@ A very basic and very lightweight configuration library for very basic needs. Li
 ## Features
 - save integer config values (with a range)
 - save boolean config values
-- no comments
+- no comments in the config file itself
 - no annotations
+- no codecs
 - that's it
 
 ## Setup & Use

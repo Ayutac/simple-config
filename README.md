@@ -1,4 +1,4 @@
-# Fabric Example Mod
+# Ayutac's Simple Config
 
 ## Setup
 

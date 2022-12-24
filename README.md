@@ -2,6 +2,13 @@
 
 A very basic and very lightweight configuration library for very basic needs. Like say, you make a mod and don't really care about configurations for your mod's users but want to address their needs anyway? Then this might be the perfect config lib for you.
 
+## Features
+- save integer config values (with a range)
+- save boolean config values
+- no comments
+- no annotations
+- that's it
+
 ## Setup & Use
 
 ```gradle

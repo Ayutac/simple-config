@@ -2,27 +2,56 @@ package org.abos.fabricmc.simpleconfig;
 
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+/**
+ * A percentage configuration property, which is really just an integer configuration property in disguise.
+ * Can save default values, a range and optionally declare a property as a game rule.
+ * @see IntConfigProperty
+ * @see #getDecimalValue(World)
+ */
 public class PercentageConfigProperty extends IntConfigProperty {
 
-    protected PercentageConfigProperty(String name, Integer defaultValue, int minValue, int maxValue, boolean withGameRule, GameRules.Category ruleCategory) {
+    /**
+     * Creates a new {@link PercentageConfigProperty}.
+     * @param name the name of the property and also of the game rule if <code>withGameRule</code> is <code>true</code>
+     * @param defaultValue the default value, which will only be validated against <code>null</code>
+     * @param minValue the minimum value of this property
+     * @param maxValue the maximum value of this property
+     * @param withGameRule if this property should be treated as a game rule
+     * @param ruleCategory should be not <code>null</code> exactly when <code>withGameRule</code> is <code>true</code>
+     * @see #PercentageConfigProperty(String, Integer, int, int)
+     * @see #PercentageConfigProperty(String, Integer, int, int, GameRules.Category)
+     */
+    protected PercentageConfigProperty(@NotNull String name, @NotNull Integer defaultValue, int minValue, int maxValue, boolean withGameRule, GameRules.Category ruleCategory) {
         super(name, defaultValue, minValue, maxValue, withGameRule, ruleCategory);
     }
 
-    public PercentageConfigProperty(String name, Integer defaultValue, int minValue, int maxValue) {
+    /**
+     * Creates a new {@link PercentageConfigProperty} that is not a game rule.
+     * @param name the name of the property
+     * @param defaultValue the default value, which will only be validated against <code>null</code>
+     * @param minValue the minimum value of this property
+     * @param maxValue the maximum value of this property
+     * @see #PercentageConfigProperty(String, Integer, int, int, GameRules.Category)
+     */
+    public PercentageConfigProperty(@NotNull String name, @NotNull Integer defaultValue, int minValue, int maxValue) {
         this(name, defaultValue, minValue, maxValue, false, null);
     }
 
-    public PercentageConfigProperty(String name, Integer defaultValue) {
-        this(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    }
-
-    public PercentageConfigProperty(String name, Integer defaultValue, int minValue, int maxValue, GameRules.Category ruleCategory) {
-        this(name, defaultValue, minValue, maxValue, true, ruleCategory);
-    }
-
-    public PercentageConfigProperty(String name, Integer defaultValue, GameRules.Category ruleCategory) {
-        this(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE, ruleCategory);
+    /**
+     * Creates a new {@link PercentageConfigProperty} which is also a game rule.
+     * @param name the name of the property and also of the game rule
+     * @param defaultValue the default value, which will only be validated against <code>null</code>
+     * @param minValue the minimum value of this property
+     * @param maxValue the maximum value of this property
+     * @param ruleCategory the category of the rule
+     * @see #PercentageConfigProperty(String, Integer, int, int)
+     */
+    public PercentageConfigProperty(@NotNull String name, @NotNull Integer defaultValue, int minValue, int maxValue, @NotNull GameRules.Category ruleCategory) {
+        this(name, defaultValue, minValue, maxValue, true, Objects.requireNonNull(ruleCategory));
     }
 
     /**

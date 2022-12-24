@@ -39,7 +39,7 @@ public final class Config extends AbstractConfig {
 }
 ```
 
-Now just add this to your mod initializer:
+Next just add this to your mod initializer:
 ```java
 public class YourMod implements ModInitializer {
     public final static Config CONFIG = new Config();

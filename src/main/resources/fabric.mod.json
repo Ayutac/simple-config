@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "simpleconfig",
+  "id": "ayusimpleconfig",
   "version": "${version}",
 
   "name": "Ayutac's Simple Config",
@@ -14,7 +14,7 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/simpleconfig/textures/icon.png",
+  "icon": "assets/ayusimpleconfig/textures/icon.png",
 
   "environment": "*",
   "entrypoints": {

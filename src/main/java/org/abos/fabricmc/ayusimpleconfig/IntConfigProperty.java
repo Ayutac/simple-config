@@ -1,4 +1,4 @@
-package org.abos.fabricmc.simpleconfig;
+package org.abos.fabricmc.ayusimpleconfig;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;

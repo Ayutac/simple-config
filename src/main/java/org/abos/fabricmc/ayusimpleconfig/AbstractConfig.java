@@ -1,4 +1,4 @@
-package org.abos.fabricmc.simpleconfig;
+package org.abos.fabricmc.ayusimpleconfig;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,7 +20,7 @@ import java.nio.file.Path;
  */
 public abstract class AbstractConfig implements Iterable<ConfigProperty<?, ? extends GameRules.Rule<?>>> {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger("simpleconfig");
+    public final static Logger LOGGER = LoggerFactory.getLogger("ayusimpleconfig");
 
     /**
      * Call this method only once and from your {@link net.fabricmc.api.ModInitializer}.

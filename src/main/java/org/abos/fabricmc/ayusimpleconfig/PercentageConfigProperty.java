@@ -1,4 +1,4 @@
-package org.abos.fabricmc.simpleconfig;
+package org.abos.fabricmc.ayusimpleconfig;
 
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;

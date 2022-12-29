@@ -22,17 +22,19 @@ public class IntConfigProperty extends ConfigProperty<Integer, GameRules.IntRule
 
     /**
      * Creates a new {@link IntConfigProperty}.
-     * @param name the name of the property and also of the game rule if <code>withGameRule</code> is <code>true</code>
+     *
+     * @param name         the name of the property and also of the game rule if <code>withGameRule</code> is <code>true</code>
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value, which will only be validated against <code>null</code>
-     * @param minValue the minimum value of this property
-     * @param maxValue the maximum value of this property
+     * @param minValue     the minimum value of this property
+     * @param maxValue     the maximum value of this property
      * @param withGameRule if this property should be treated as a game rule
      * @param ruleCategory should be not <code>null</code> exactly when <code>withGameRule</code> is <code>true</code>
-     * @see #IntConfigProperty(String, Integer, int, int)
-     * @see #IntConfigProperty(String, Integer, int, int, GameRules.Category)
+     * @see #IntConfigProperty(String, String, Integer, int, int)
+     * @see #IntConfigProperty(String, String, Integer, int, int, GameRules.Category)
      */
-    protected IntConfigProperty(@NotNull String name, @NotNull Integer defaultValue, int minValue, int maxValue, boolean withGameRule, GameRules.Category ruleCategory) {
-        super(name, defaultValue, withGameRule, ruleCategory);
+    protected IntConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull Integer defaultValue, int minValue, int maxValue, boolean withGameRule, GameRules.Category ruleCategory) {
+        super(name, namespace, defaultValue, withGameRule, ruleCategory);
         if (maxValue < minValue) {
             throw new IllegalArgumentException("Min value must be smaller than or equal to max value!");
         }
@@ -43,27 +45,31 @@ public class IntConfigProperty extends ConfigProperty<Integer, GameRules.IntRule
 
     /**
      * Creates a new {@link IntConfigProperty} that is not a game rule.
-     * @param name the name of the property
+     *
+     * @param name         the name of the property
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value, which will only be validated against <code>null</code>
-     * @param minValue the minimum value of this property
-     * @param maxValue the maximum value of this property
-     * @see #IntConfigProperty(String, Integer, int, int, GameRules.Category)
+     * @param minValue     the minimum value of this property
+     * @param maxValue     the maximum value of this property
+     * @see #IntConfigProperty(String, String, Integer, int, int, GameRules.Category)
      */
-    public IntConfigProperty(@NotNull String name, @NotNull Integer defaultValue, int minValue, int maxValue) {
-        this(name, defaultValue, minValue, maxValue, false, null);
+    public IntConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull Integer defaultValue, int minValue, int maxValue) {
+        this(name, namespace, defaultValue, minValue, maxValue, false, null);
     }
 
     /**
      * Creates a new {@link IntConfigProperty} which is also a game rule.
-     * @param name the name of the property and also of the game rule
+     *
+     * @param name         the name of the property and also of the game rule
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value, which will only be validated against <code>null</code>
-     * @param minValue the minimum value of this property
-     * @param maxValue the maximum value of this property
+     * @param minValue     the minimum value of this property
+     * @param maxValue     the maximum value of this property
      * @param ruleCategory the category of the rule
-     * @see #IntConfigProperty(String, Integer, int, int)
+     * @see #IntConfigProperty(String, String, Integer, int, int)
      */
-    public IntConfigProperty(@NotNull String name, @NotNull Integer defaultValue, int minValue, int maxValue, @NotNull GameRules.Category ruleCategory) {
-        this(name, defaultValue, minValue, maxValue, true, Objects.requireNonNull(ruleCategory));
+    public IntConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull Integer defaultValue, int minValue, int maxValue, @NotNull GameRules.Category ruleCategory) {
+        this(name, namespace, defaultValue, minValue, maxValue, true, Objects.requireNonNull(ruleCategory));
     }
 
     /**
@@ -88,7 +94,7 @@ public class IntConfigProperty extends ConfigProperty<Integer, GameRules.IntRule
         }
         GameRules.IntRule rule = world.getGameRules().get(getRuleKey());
         if (rule == null) {
-            AbstractConfig.LOGGER.warn("Rule "+getName()+" couldn't be found!");
+            AbstractConfig.LOGGER.warn("Rule "+getRuleName()+" couldn't be found!");
             return null;
         }
         return rule.get();
@@ -101,7 +107,7 @@ public class IntConfigProperty extends ConfigProperty<Integer, GameRules.IntRule
             rule.set(value, server);
         }
         else {
-            AbstractConfig.LOGGER.warn("Rule "+getName()+" couldn't be found!");
+            AbstractConfig.LOGGER.warn("Rule "+getRuleName()+" couldn't be found!");
         }
     }
 
@@ -123,8 +129,8 @@ public class IntConfigProperty extends ConfigProperty<Integer, GameRules.IntRule
             throw new IllegalStateException("Only rules can be registered! "+getName()+" is not a rule!");
         }
         if (ruleKey != null) {
-            throw new IllegalStateException("Attempted to register "+getName()+" twice!");
+            throw new IllegalStateException("Attempted to register "+getRuleName()+" twice!");
         }
-        return ruleKey = GameRuleRegistry.register(getName(), getRuleCategory(), GameRuleFactory.createIntRule(getDefaultValue()));
+        return ruleKey = GameRuleRegistry.register(getRuleName(), getRuleCategory(), GameRuleFactory.createIntRule(getDefaultValue()));
     }
 }

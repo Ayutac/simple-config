@@ -19,6 +19,8 @@ public abstract class ConfigProperty<T, R extends GameRules.Rule<R>> {
 
     private final String name;
 
+    private final String namespace;
+
     /**
      * the cached value
      */
@@ -34,16 +36,19 @@ public abstract class ConfigProperty<T, R extends GameRules.Rule<R>> {
 
     /**
      * Creates a new {@link ConfigProperty}.
-     * @param name the name of the property and also of the game rule if <code>withGameRule</code> is <code>true</code>
+     *
+     * @param name         the name of the property and also of the game rule if <code>withGameRule</code> is <code>true</code>
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value, which will only be validated against <code>null</code>
      * @param withGameRule if this property should be treated as a game rule
      * @param ruleCategory should be not <code>null</code> exactly when <code>withGameRule</code> is <code>true</code>
-     * @see #ConfigProperty(String, Object)
-     * @see #ConfigProperty(String, Object, GameRules.Category)
+     * @see #ConfigProperty(String, String, Object)
+     * @see #ConfigProperty(String, String, Object, GameRules.Category)
      * @see #validate(Object)
      */
-    protected ConfigProperty(@NotNull String name, @NotNull T defaultValue, boolean withGameRule, GameRules.Category ruleCategory) {
+    protected ConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull T defaultValue, boolean withGameRule, GameRules.Category ruleCategory) {
         this.name = Objects.requireNonNull(name);
+        this.namespace = namespace;
         this.defaultValue = Objects.requireNonNull(defaultValue);
         resetValue();
         this.withGameRule = withGameRule;
@@ -53,25 +58,27 @@ public abstract class ConfigProperty<T, R extends GameRules.Rule<R>> {
     /**
      * Creates a new {@link ConfigProperty} that is not a game rule.
      * @param name the name of the property
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value, which will only be validated against <code>null</code>
-     * @see #ConfigProperty(String, Object, GameRules.Category)
+     * @see #ConfigProperty(String, String, Object, GameRules.Category)
      * @see #validate(Object)
      */
-    public ConfigProperty(@NotNull String name, @NotNull T defaultValue) {
-        this(name, defaultValue, false, null);
+    public ConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull T defaultValue) {
+        this(name, namespace, defaultValue, false, null);
     }
 
 
     /**
      * Creates a new {@link ConfigProperty} which is also a game rule.
      * @param name the name of the property and also of the game rule
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value, which will only be validated against <code>null</code>
      * @param ruleCategory the category of the rule
-     * @see #ConfigProperty(String, Object)
+     * @see #ConfigProperty(String, String, Object)
      * @see #validate(Object)
      */
-    public ConfigProperty(@NotNull String name, @NotNull T defaultValue, @NotNull GameRules.Category ruleCategory) {
-        this(name, defaultValue, true, Objects.requireNonNull(ruleCategory));
+    public ConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull T defaultValue, @NotNull GameRules.Category ruleCategory) {
+        this(name, namespace, defaultValue, true, Objects.requireNonNull(ruleCategory));
     }
 
     /**
@@ -80,6 +87,22 @@ public abstract class ConfigProperty<T, R extends GameRules.Rule<R>> {
     @NotNull
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return the namespace of this property
+     */
+    @Nullable
+    public String getNamespace() {
+        return namespace;
+    }
+
+    @NotNull
+    public String getRuleName() {
+        if (getNamespace() == null) {
+            return getName();
+        }
+        return getNamespace() + "." + getName();
     }
 
     /**
@@ -110,7 +133,7 @@ public abstract class ConfigProperty<T, R extends GameRules.Rule<R>> {
         if (isWithGameRule() && world != null) {
             T rVal = getRuleValue(world);
             if (rVal == null) {
-                AbstractConfig.LOGGER.warn("Rule "+getName()+" couldn't be found!");
+                AbstractConfig.LOGGER.warn("Rule "+getRuleName()+" couldn't be found!");
                 return value;
             }
             return value = rVal;

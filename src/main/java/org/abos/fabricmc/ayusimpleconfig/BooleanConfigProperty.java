@@ -17,23 +17,27 @@ public class BooleanConfigProperty extends ConfigProperty<Boolean, GameRules.Boo
 
     /**
      * Creates a new {@link BooleanConfigProperty} that is not a game rule.
-     * @param name the name of the property
+     *
+     * @param name         the name of the property
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value
-     * @see #BooleanConfigProperty(String, Boolean, GameRules.Category)
+     * @see #BooleanConfigProperty(String, String, Boolean, GameRules.Category)
      */
-    public BooleanConfigProperty(@NotNull String name, @NotNull Boolean defaultValue) {
-        super(name, defaultValue);
+    public BooleanConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull Boolean defaultValue) {
+        super(name, namespace, defaultValue);
     }
 
     /**
      * Creates a new {@link BooleanConfigProperty} which is also a game rule.
-     * @param name the name of the property and also of the game rule
+     *
+     * @param name         the name of the property and also of the game rule
+     * @param namespace    the namespace of the property
      * @param defaultValue the default value
      * @param ruleCategory the category of the rule
-     * @see #BooleanConfigProperty(String, Boolean)
+     * @see #BooleanConfigProperty(String, String, Boolean)
      */
-    public BooleanConfigProperty(@NotNull String name, @NotNull Boolean defaultValue, @NotNull GameRules.Category ruleCategory) {
-        super(name, defaultValue, ruleCategory);
+    public BooleanConfigProperty(@NotNull String name, @Nullable String namespace, @NotNull Boolean defaultValue, @NotNull GameRules.Category ruleCategory) {
+        super(name, namespace, defaultValue, ruleCategory);
     }
 
     @Override
@@ -44,7 +48,7 @@ public class BooleanConfigProperty extends ConfigProperty<Boolean, GameRules.Boo
         }
         GameRules.BooleanRule rule = world.getGameRules().get(getRuleKey());
         if (rule == null) {
-            AbstractConfig.LOGGER.warn("Rule "+getName()+" couldn't be found!");
+            AbstractConfig.LOGGER.warn("Rule "+getRuleName()+" couldn't be found!");
             return null;
         }
         return rule.get();
@@ -57,7 +61,7 @@ public class BooleanConfigProperty extends ConfigProperty<Boolean, GameRules.Boo
             rule.set(value, server);
         }
         else {
-            AbstractConfig.LOGGER.warn("Rule "+getName()+" couldn't be found!");
+            AbstractConfig.LOGGER.warn("Rule "+getRuleName()+" couldn't be found!");
         }
     }
 
@@ -76,8 +80,8 @@ public class BooleanConfigProperty extends ConfigProperty<Boolean, GameRules.Boo
             throw new IllegalStateException("Only rules can be registered! "+getName()+" is not a rule!");
         }
         if (ruleKey != null) {
-            throw new IllegalStateException("Attempted to register "+getName()+" twice!");
+            throw new IllegalStateException("Attempted to register "+getRuleName()+" twice!");
         }
-        return ruleKey = GameRuleRegistry.register(getName(), getRuleCategory(), GameRuleFactory.createBooleanRule(getDefaultValue()));
+        return ruleKey = GameRuleRegistry.register(getRuleName(), getRuleCategory(), GameRuleFactory.createBooleanRule(getDefaultValue()));
     }
 }
